@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{TITLE}}</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f5f6;color:#222;font-family:"Microsoft YaHei",Arial,sans-serif;letter-spacing:0}.toolbar{position:sticky;top:0;z-index:2;background:#fff;border-bottom:1px solid #ddd;padding:12px 20px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}.toolbar button{background:#fff;border:1px solid #ccc;border-radius:4px;padding:9px 14px;font:inherit;cursor:pointer}.toolbar button.primary{background:#177249;color:#fff;border-color:#177249}.toolbar button:disabled{opacity:.6;cursor:wait}#status{font-size:13px;color:#555}.page{max-width:740px;background:#fff;margin:24px auto;padding:36px 44px}#title{font-size:24px;line-height:1.5;margin:0 0 28px;overflow-wrap:anywhere}#article{font-size:16px;line-height:1.75;color:#333;overflow-wrap:anywhere}#article img{max-width:100%;height:auto}#article table{table-layout:fixed}@media(max-width:600px){.page{margin:0;padding:24px 20px}.toolbar{padding:10px 12px}#title{font-size:22px}}@media print{.toolbar{display:none}.page{margin:0;padding:0}}
+@media(max-width:600px){#article img{width:100%!important}}
+</style>
+</head>
+<body>
+<div class="toolbar">
+<button id="copy-title" type="button">复制标题</button>
+<button id="copy-summary" type="button">复制{{SUMMARY_LABEL}}</button>
+{{TAGS_BUTTON}}
+<button id="copy-body" type="button" class="primary">复制正文</button>
+<span id="status" role="status" aria-live="polite">图片随粘贴是否保留，请在目标编辑器核对。</span>
+</div>
+<main class="page">
+<h1 id="title">{{TITLE}}</h1>
+<section id="article" style="font-family:Microsoft YaHei,Arial,sans-serif;font-size:16px;line-height:1.75;color:#333333;text-align:left;text-indent:0;letter-spacing:0;">{{BODY}}</section>
+<aside style="margin:28px 0 0;padding:20px 0 0;border-top:1px solid #ddd;overflow-wrap:anywhere;">
+<p style="font-size:13px;color:#666;margin:0 0 8px;">{{SUMMARY_HEADING}}</p>
+<p id="summary" style="font-size:15px;line-height:1.7;margin:0 0 16px;">{{SUMMARY}}</p>
+{{TAGS_BLOCK}}
+</aside>
+</main>
+<script>
+function legacyCopy(element, htmlMode) {
+  const selection = window.getSelection();
+  const range = document.createRange();
+  range.selectNodeContents(element);
+  selection.removeAllRanges();
+  selection.addRange(range);
+  let copied = false;
+  const handler = event => {
+    event.preventDefault();
+    event.clipboardData.setData("text/plain", element.innerText);
+    if (htmlMode) event.clipboardData.setData("text/html", element.outerHTML);
+  };
+  document.addEventListener("copy", handler);
+  try { copied = document.execCommand("copy"); }
+  finally { document.removeEventListener("copy", handler); }
+  if (copied) selection.removeAllRanges();
+  return copied;
+}
+async function copyContent(id, htmlMode, button) {
+  const element = document.getElementById(id);
+  const status = document.getElementById("status");
+  const label = {title:"标题", summary:"{{SUMMARY_LABEL}}", tags:"标签", article:"正文"}[id];
+  button.disabled = true;
+  try {
+    let copied = false;
+    if (navigator.clipboard && window.ClipboardItem && window.isSecureContext) {
+      try {
+        const data = {"text/plain": new Blob([element.innerText], {type:"text/plain"})};
+        if (htmlMode) data["text/html"] = new Blob([element.outerHTML], {type:"text/html"});
+        await navigator.clipboard.write([new ClipboardItem(data)]);
+        copied = true;
+      } catch (_) {}
+    }
+    if (!copied) copied = legacyCopy(element, htmlMode);
+    if (!copied) throw new Error("copy failed");
+    status.textContent = htmlMode ? "已复制排版正文；粘贴后请核对图片。" : label + "已复制";
+  } catch (_) {
+    status.textContent = "复制未成功。" + label + "已选中，请手动复制后粘贴。";
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+  } finally { button.disabled = false; }
+}
+document.getElementById("copy-title").addEventListener("click", event =>
+  copyContent("title", false, event.currentTarget));
+document.getElementById("copy-summary").addEventListener("click", event =>
+  copyContent("summary", false, event.currentTarget));
+{{TAGS_LISTENER}}
+document.getElementById("copy-body").addEventListener("click", event =>
+  copyContent("article", true, event.currentTarget));
+</script>
+</body>
+</html>

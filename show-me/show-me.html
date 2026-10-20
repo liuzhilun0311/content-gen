@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>内容创作</title>
+<style>
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#fff;color:#252b2e;font:16px/1.8 "Microsoft YaHei",Arial,sans-serif;letter-spacing:0}main{max-width:960px;margin:auto;padding:32px 28px 48px}header{padding-bottom:24px}h1{margin:0 0 12px;font-size:32px;line-height:1.4;overflow-wrap:anywhere}header p{font-size:20px;margin:0;max-width:800px;color:#526069}.visual{display:block;width:100%;height:auto;aspect-ratio:4/3}section{padding:32px 0;border-bottom:1px solid #e0e5e7}h2{font-size:24px;line-height:1.5;margin:0 0 20px}h3{font-size:18px;margin:0 0 8px}p{margin:0 0 14px}.benefits{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}.benefits>div{border-top:3px solid #198368;padding-top:16px}.benefits>div:nth-child(2){border-color:#ba637d}.benefits>div:nth-child(3){border-color:#447baa}.benefits>div:nth-child(4){border-color:#aa7840}.benefits p{color:#526069;margin:0}.outputs{display:grid;grid-template-columns:160px minmax(0,1fr);margin:0}.outputs dt,.outputs dd{padding:14px 0;border-top:1px solid #e0e5e7;margin:0}.outputs dt{font-weight:bold}.outputs dd{padding-left:20px;color:#526069}.start{border-bottom:0}button{background:#176e58;color:#fff;border:0;border-radius:4px;padding:12px 18px;font:inherit;cursor:pointer}button:hover{background:#115443}button:focus-visible{outline:3px solid #447baa;outline-offset:3px}.command{display:block;margin:14px 0;font:15px/1.6 Consolas,monospace;overflow-wrap:anywhere}#status{font-size:14px;color:#526069;margin:12px 0 0;min-height:25px}footer{font-size:14px;color:#697278;border-top:1px solid #e0e5e7;padding-top:18px}
+@media(max-width:760px){.benefits{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){main{padding:24px 18px 36px}h1{font-size:27px}header p{font-size:18px}.benefits{grid-template-columns:1fr;gap:22px}section{padding:26px 0}h2{font-size:22px}.outputs{grid-template-columns:90px minmax(0,1fr)}.outputs dd{padding-left:12px}}
+@media print{main{max-width:none}button,#status{display:none}.visual{max-height:180mm;object-fit:contain}.benefits{break-inside:avoid}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>内容创作</h1>
+<p>整理文字资料，多样配图，按领域进行专业校验，生成多平台成品</p>
+</header>
+<img class="visual" src="2.framework_vector-illustration_macaron.png" alt="专业领域内容生产SKILL：文字资料整理、多种类型风格配色的配图、专业校验、生成内容" width="1152" height="864">
+<section>
+<h2>把专业知识，变成可分享的内容</h2>
+<div class="benefits">
+<div><h3>文字资料整理</h3><p>梳理课程稿、技术资料和文章，形成清晰完整的专业正文</p></div>
+<div><h3>配图</h3><p>多种类型、风格、配色可选；复杂知识，直观呈现</p></div>
+<div><h3>专业校验</h3><p>按所选领域设定专家视角，核对专业内容与图文对应</p></div>
+<div><h3>生成内容</h3><p>按不同平台组织表达，交付图文成品和完整阅读版</p></div>
+</div>
+</section>
+<section>
+<h2>一份材料，多种成品</h2>
+<dl class="outputs">
+<dt>专业图文</dt><dd>完整正文与教学配图</dd>
+<dt>平台内容</dt><dd>知乎 · 微信公众号 · CSDN · 抖音 · 小红书</dd>
+<dt>阅读分享</dt><dd>HTML · EPUB · PDF，配图与目录一起交付</dd>
+</dl>
+</section>
+<section>
+<h2>把精力留给你的专业</h2>
+<p>适合课程讲师、专业创作者、技术分享者，以及需要将知识整理成内容的团队</p>
+<p>已有课程稿、技术资料或文章，都可以作为创作素材</p>
+</section>
+<section class="start">
+<h2>从你的下一份材料开始</h2>
+<p>带上文字资料，告诉它你想面向谁、分享什么</p>
+<button id="copy" type="button">复制调用口令</button>
+<code class="command" id="command">$content-gen</code>
+<p id="status" role="status" aria-live="polite"></p>
+</section>
+<footer>文字资料整理 · 配图 · 专业校验 · 生成内容</footer>
+</main>
+<script>
+document.getElementById("copy").addEventListener("click", async () => {
+  const command = document.getElementById("command");
+  const status = document.getElementById("status");
+  try {
+    if (!navigator.clipboard) throw new Error("fallback");
+    await navigator.clipboard.writeText(command.textContent);
+    status.textContent = "调用口令已复制";
+  } catch (_) {
+    const range = document.createRange();
+    range.selectNodeContents(command);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    let copied = false;
+    try {copied = document.execCommand("copy");} catch (_) {}
+    status.textContent = copied ? "调用口令已复制" : "调用口令已选中";
+    if (copied) selection.removeAllRanges();
+  }
+});
+</script>
+</body>
+</html>

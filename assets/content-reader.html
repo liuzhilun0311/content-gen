@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{TITLE}}</title>
+<style>
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#fff;color:#333;font-family:"Microsoft YaHei",Arial,sans-serif;letter-spacing:0}header{border-bottom:1px solid #ddd;padding:16px 24px;display:flex;justify-content:space-between;gap:24px}a{color:#176b48;text-decoration:none}a:hover{text-decoration:underline}.layout{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:240px minmax(0,740px);gap:40px;padding:32px 24px}#toc{position:sticky;top:24px;align-self:start;max-height:calc(100vh - 48px);overflow:auto;font-size:14px;line-height:1.7}#toc summary{cursor:pointer;font-weight:bold;font-size:16px}#toc ol{list-style:none;padding-left:20px;margin:8px 0}#toc li{margin:6px 0;overflow-wrap:anywhere}#article{min-width:0;font-size:16px;line-height:1.75;overflow-wrap:anywhere}#article h1{font-size:28px;line-height:1.4;margin:0 0 28px}#article h1,#article h2,#article h3,#article h4,#article h5,#article h6{scroll-margin-top:24px;break-after:avoid}#article img{display:block;width:85%;max-width:100%;height:auto;margin:20px auto 8px}figure{margin:20px 0 24px;break-inside:avoid}figure>p{margin:0}table{table-layout:fixed}pre{white-space:pre-wrap;overflow-wrap:anywhere}blockquote{border-left:3px solid #b5cabc;padding-left:16px!important}p{orphans:3;widows:3}tr{break-inside:avoid}
+@media(max-width:800px){.layout{display:block;padding:24px 20px}#toc{position:static;max-height:none;margin:0 0 32px}header{padding:16px 20px}#article h1{font-size:24px}}
+@media(max-width:600px){#article img{width:100%!important}}
+@media print{html{scroll-behavior:auto}header{display:none}.layout{display:block;max-width:none;padding:0}#toc{position:static;max-height:none;overflow:visible;break-after:page;margin:0}#toc summary{display:block;font-size:22pt;margin-bottom:20pt}#toc a{color:#222}#article{font-size:11pt}#article p{font-size:11pt!important;line-height:1.7!important}#article h1{font-size:22pt}#article img{width:85%!important;max-height:180mm;object-fit:contain}#article figure p:last-child{font-size:10pt!important}#article pre,#article td{font-size:9pt!important}a{color:#222}figure{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header><a href="#article">{{TITLE}}</a><a href="#toc">目录</a></header>
+<div class="layout">
+<nav id="toc" aria-label="目录"><details open><summary>目录</summary>{{TOC}}</details></nav>
+<main id="article">{{BODY}}</main>
+</div>
+</body>
+</html>

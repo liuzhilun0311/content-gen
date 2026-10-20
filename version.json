@@ -1,0 +1,8 @@
+{
+  "version": "1.2.0",
+  "release_date": "2026-10-12",
+  "stage_schema_version": 2,
+  "image_plan_schema_version": 2,
+  "execution_config_schema_version": 1,
+  "longform_schema_version": 2
+}
